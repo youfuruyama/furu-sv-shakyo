@@ -1,0 +1,227 @@
+{
+    "consumer": {
+      "name": "mower_ui"
+    },
+    "interactions": [
+      {
+        "description": "create edge-001",
+        "request": {
+          "body": {
+            "core": {
+              "thing": {
+                "attributes": {
+                  "key1": "value1",
+                  "key2": "value2",
+                  "key3": "value3",
+                  "key4": "value4"
+                },
+                "name": "core-001",
+                "type": "thing-type-001"
+              }
+            },
+            "devices": [
+              {
+                "thing": {
+                  "attributes": {},
+                  "name": "device-001-001"
+                }
+              }
+            ],
+            "name": "edge-001"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "method": "POST",
+          "path": "/api/edges"
+        },
+        "response": {
+          "body": {
+            "core": {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "thing": {
+                "attributes": {
+                  "key1": "value1",
+                  "key2": "value2",
+                  "key3": "value3",
+                  "key4": "value4"
+                },
+                "id": "33333333-3333-3333-3333-000000000001",
+                "name": "core-001",
+                "type": "thing-type-001"
+              }
+            },
+            "devices": [
+              {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "thing": {
+                  "attributes": {},
+                  "id": "33333333-3333-3333-3333-000000000002",
+                  "name": "device-001-001"
+                }
+              }
+            ],
+            "id": "eeeeeeee-eeee-eeee-eeee-000000000001",
+            "name": "edge-001"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "status": 201
+        }
+      },
+      {
+        "description": "fail to create thing with duplicated name",
+        "request": {
+          "body": {
+            "core": {
+              "thing": {
+                "attributes": {},
+                "name": "core-001"
+              }
+            },
+            "devices": [],
+            "name": "edge-900"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "method": "POST",
+          "path": "/api/edges"
+        },
+        "response": {
+          "status": 400
+        }
+      },
+      {
+        "description": "fail to create thing with non-existing type",
+        "request": {
+          "body": {
+            "core": {
+              "thing": {
+                "attributes": {},
+                "name": "core-900",
+                "type": "thing-type-999"
+              }
+            },
+            "devices": [],
+            "name": "edge-900"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "method": "POST",
+          "path": "/api/edges"
+        },
+        "response": {
+          "status": 400
+        }
+      },
+      {
+        "description": "fail to create edge if the number of its attributes exceeds limit",
+        "request": {
+          "body": {
+            "core": {
+              "thing": {
+                "attributes": {
+                  "key1": "value1",
+                  "key2": "value2",
+                  "key3": "value3",
+                  "key4": "value4"
+                },
+                "name": "core-900"
+              }
+            },
+            "devices": [],
+            "name": "edge-900"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "method": "POST",
+          "path": "/api/edges"
+        },
+        "response": {
+          "status": 400
+        }
+      },
+      {
+        "description": "list edges",
+        "request": {
+          "method": "GET",
+          "path": "/api/edges"
+        },
+        "response": {
+          "body": [
+            {
+              "id": "eeeeeeee-eeee-eeee-eeee-000000000001",
+              "name": "edge-001"
+            }
+          ],
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "status": 200
+        }
+      },
+      {
+        "description": "get edge-001",
+        "request": {
+          "method": "GET",
+          "path": "/api/edges/eeeeeeee-eeee-eeee-eeee-000000000001"
+        },
+        "response": {
+          "body": {
+            "core": {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "thing": {
+                "attributes": {
+                  "key1": "value1",
+                  "key2": "value2",
+                  "key3": "value3",
+                  "key4": "value4"
+                },
+                "id": "33333333-3333-3333-3333-000000000001",
+                "name": "core-001",
+                "type": "thing-type-001"
+              }
+            },
+            "devices": [
+              {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "thing": {
+                  "attributes": {},
+                  "id": "33333333-3333-3333-3333-000000000002",
+                  "name": "device-001-001"
+                }
+              }
+            ],
+            "id": "eeeeeeee-eeee-eeee-eeee-000000000001",
+            "name": "edge-001"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "status": 200
+        }
+      },
+      {
+        "description": "fail to get non-existing edge",
+        "request": {
+          "method": "GET",
+          "path": "/api/edges/deadbeef-dead-beef-dead-beefdeadbeef"
+        },
+        "response": {
+          "status": 404
+        }
+      }
+    ],
+    "metadata": {
+      "pactSpecification": {
+        "version": "2.0.0"
+      }
+    },
+    "provider": {
+      "name": "mower_sv"
+    }
+  }

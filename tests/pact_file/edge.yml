@@ -1,0 +1,163 @@
+metadata:
+  pactSpecification:
+    version: '2.0.0'
+consumer:
+  name: 'mower_ui'
+provider:
+  name: 'mower_sv'
+
+interactions:
+
+# エッジ#1を作成する
+- description: 'create edge-001'
+  request:
+    method: POST
+    path: /api/edges
+    headers:
+      Content-Type: 'application/json'
+    body:
+      name: 'edge-001'
+      core:
+        thing:
+          name: 'core-001'
+          type: 'thing-type-001'
+          attributes:
+            'key1': 'value1'
+            'key2': 'value2'
+            'key3': 'value3'
+            'key4': 'value4'
+      devices:
+      - thing:
+          name: 'device-001-001'
+          attributes: {}
+  response:
+    status: 201
+    headers:
+      Content-Type: 'application/json'
+    body:
+      id: 'eeeeeeee-eeee-eeee-eeee-000000000001'
+      name: 'edge-001'
+      core:
+        id: '00000000-0000-0000-0000-000000000001'
+        thing:
+          id: '33333333-3333-3333-3333-000000000001'
+          name: 'core-001'
+          type: 'thing-type-001'
+          attributes:
+            'key1': 'value1'
+            'key2': 'value2'
+            'key3': 'value3'
+            'key4': 'value4'
+      devices:
+      - id: '00000000-0000-0000-0000-000000000002'
+        thing:
+          id: '33333333-3333-3333-3333-000000000002'
+          name: 'device-001-001'
+          attributes: {}
+
+# 【異常系】名前が重複しているモノを作成できない
+- description: 'fail to create thing with duplicated name'
+  request:
+    method: POST
+    path: /api/edges
+    headers:
+      Content-Type: 'application/json'
+    body:
+      name: 'edge-900'
+      core:
+        thing:
+          name: 'core-001'
+          attributes: {}
+      devices: []
+  response:
+    status: 400
+
+# 【異常系】存在しないタイプを持つモノを作成できない
+- description: 'fail to create thing with non-existing type'
+  request:
+    method: POST
+    path: /api/edges
+    headers:
+      Content-Type: 'application/json'
+    body:
+      name: 'edge-900'
+      core:
+        thing:
+          name: 'core-900'
+          type: 'thing-type-999'
+          attributes: {}
+      devices: []
+  response:
+    status: 400
+
+# 【異常系】属性の個数が上限を超過しているモノを作成できない
+- description: 'fail to create edge if the number of its attributes exceeds limit'
+  request:
+    method: POST
+    path: /api/edges
+    headers:
+      Content-Type: 'application/json'
+    body:
+      name: 'edge-900'
+      core:
+        thing:
+          name: 'core-900'
+          attributes:
+            'key1': 'value1'
+            'key2': 'value2'
+            'key3': 'value3'
+            'key4': 'value4'
+      devices: []
+  response:
+    status: 400
+
+# エッジの一覧を取得する
+- description: 'list edges'
+  request:
+    method: GET
+    path: /api/edges
+  response:
+    status: 200
+    headers:
+      Content-Type: 'application/json'
+    body:
+    - id: 'eeeeeeee-eeee-eeee-eeee-000000000001'
+      name: 'edge-001'
+
+# エッジの詳細を取得する
+- description: 'get edge-001'
+  request:
+    method: GET
+    path: /api/edges/eeeeeeee-eeee-eeee-eeee-000000000001
+  response:
+    status: 200
+    headers:
+      Content-Type: 'application/json'
+    body:
+      id: 'eeeeeeee-eeee-eeee-eeee-000000000001'
+      name: 'edge-001'
+      core:
+        id: '00000000-0000-0000-0000-000000000001'
+        thing:
+          id: '33333333-3333-3333-3333-000000000001'
+          name: 'core-001'
+          type: 'thing-type-001'
+          attributes:
+            'key1': 'value1'
+            'key2': 'value2'
+            'key3': 'value3'
+            'key4': 'value4'
+      devices:
+      - id: '00000000-0000-0000-0000-000000000002'
+        thing:
+          id: '33333333-3333-3333-3333-000000000002'
+          name: 'device-001-001'
+          attributes: {}
+
+# 【異常系】存在しないエッジの詳細を取得できない
+- description: 'fail to get non-existing edge'
+  request:
+    method: GET
+    path: /api/edges/deadbeef-dead-beef-dead-beefdeadbeef
+  response:
+    status: 404
