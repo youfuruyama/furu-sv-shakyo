@@ -38,7 +38,7 @@ s3transfer==0.1.13
 six==1.12.0
 starlette==0.9.9
 urllib3==1.24.1 ; python_version >= '3.4'
-uvicorn==0.3.24
+uvicorn==0.11.7
 uvloop==0.12.0rc1 ; sys_platform != 'win32'
 websockets==7.0
 whitenoise==4.1.2
